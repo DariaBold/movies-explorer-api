@@ -4,7 +4,6 @@ const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-const NotFoundError = require('../errors/NotFoundError');
 
 const { SECRET_KEY = 'some-secret-key' } = process.env;
 
@@ -36,13 +35,14 @@ module.exports.patchUser = (req, res, next) => {
   const { name, email } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .orFail()
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({
+      name: user.name,
+      email: user.email,
+    }))
     .catch((err) => {
-      if (err.name === 'DocumentNotFoundError') {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
-        return;
-      }
-      if (err.name === 'ValidationError') {
+      if (err.code === 11000) {
+        next(new ConflictError('Email уже зарегистрирован'));
+      } else if (err.name === 'ValidationError') {
         next(new BadRequestError(err.message));
       } else {
         next(err);
