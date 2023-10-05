@@ -25,7 +25,7 @@ module.exports.createMovies = (req, res, next) => {
     .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError(err.message));
+        next(new BadRequestError('Невалидные данные'));
       } else {
         next(err);
       }
@@ -41,7 +41,7 @@ module.exports.deleteMovieId = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie.owner.equals(req.user._id)) {
-        throw new ForbiddenError('Это фильм другого участника.');
+        next(new ForbiddenError('Это фильм другого участника.'));
       }
       Movie.deleteOne(movie)
         .orFail()
@@ -49,15 +49,13 @@ module.exports.deleteMovieId = (req, res, next) => {
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(new BadRequestError('Некорректный _id карточки.'));
-          } else if (err.name === 'DocumentNotFoundError') {
-            next(new NotFoundError('фильм по указанному _id не найден.'));
           } else {
             next(err);
           }
         });
     })
     .catch((err) => {
-      if (err.name === 'TypeError') {
+      if (err.name === 'DocumentNotFoundError') {
         next(new NotFoundError('фильм по указанному _id не найден.'));
       } else {
         next(err);

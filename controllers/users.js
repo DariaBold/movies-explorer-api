@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
-
-const { SECRET_KEY = 'some-secret-key' } = process.env;
+const { SECRET_KEY } = require('../config');
 
 module.exports.createUser = (req, res, next) => {
   const {
@@ -24,7 +22,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.code === 11000) {
         next(new ConflictError('Email уже зарегистрирован'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequestError(err.message));
+        next(new BadRequestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -43,7 +41,7 @@ module.exports.patchUser = (req, res, next) => {
       if (err.code === 11000) {
         next(new ConflictError('Email уже зарегистрирован'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequestError(err.message));
+        next(new BadRequestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -59,12 +57,10 @@ module.exports.login = (req, res, next) => {
         token: jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' }),
       });
     })
-    .catch((err) => {
-      next(new UnauthorizedError(err.message));
-    });
+    .catch(next);
 };
 module.exports.getUserNow = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => res.send(user))
-    .catch((err) => next(err));
+    .catch(next);
 };
