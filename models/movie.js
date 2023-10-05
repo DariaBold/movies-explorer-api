@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const patternUrl = require('../utils/constants');
+const { patternUrl } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
