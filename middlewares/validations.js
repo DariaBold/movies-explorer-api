@@ -1,6 +1,6 @@
 const { celebrate, Joi, Segments } = require('celebrate');
 
-const { patternUrl, patternRU, patternEN } = require('../utils/constants');
+const { patternUrl, patternEN } = require('../utils/constants');
 
 const validateMovieCreate = celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -22,7 +22,7 @@ const validateMovieCreate = celebrate({
       'string.pattern': 'введите корректную ссылку на миниатюрное изображение',
     }),
     movieId: Joi.number().required().messages({ 'string.required': 'заполните поле id фильма' }),
-    nameRU: Joi.string().pattern(patternRU).required().messages({
+    nameRU: Joi.string().required().messages({
       'string.required': 'введите название на русском',
       'string.pattern': 'введите корректное название на русском',
     }),

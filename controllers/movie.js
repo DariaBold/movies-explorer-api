@@ -25,7 +25,7 @@ module.exports.createMovies = (req, res, next) => {
     .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Невалидные данные'));
+        next(new BadRequestError(err));
       } else {
         next(err);
       }
