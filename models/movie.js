@@ -71,11 +71,6 @@ const movieSchema = new mongoose.Schema({
   nameRU: {
     type: String,
     required: [true, 'заполните поле'],
-    validate: {
-      validator(v) {
-        return /^[а-яё0-9]+$/iu.test(v);
-      },
-    },
     message: ['введите название на русском'],
   },
   nameEN: {
