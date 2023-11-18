@@ -78,7 +78,7 @@ const movieSchema = new mongoose.Schema({
     required: [true, 'заполните поле'],
     validate: {
       validator(v) {
-        return /^[a-zA-Z\d\s!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]+$/.test(v);
+        return /^[a-zA-Z\d\s!"#$%&'()*+,-.–:;<=>?@[\]^_`{|}~/]+$/.test(v);
       },
     },
     message: ['введите название на английском'],
