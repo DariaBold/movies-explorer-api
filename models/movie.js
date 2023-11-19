@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { patternUrl } = require('../utils/constants');
+const { patternUrl, patternEN } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -78,7 +78,7 @@ const movieSchema = new mongoose.Schema({
     required: [true, 'заполните поле'],
     validate: {
       validator(v) {
-        return /^[a-zA-Z\d\s!"#$%&'()*+,-.–:;<=>?@[\]^_`{|}~/]+$/.test(v);
+        return patternEN.test(v);
       },
     },
     message: ['введите название на английском'],
