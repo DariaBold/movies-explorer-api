@@ -6,14 +6,14 @@
 
 
 ## Что использовано
-- JavaScript
-- Node.js
-- Express
+- JavaScript  
+- Node.js  
+- Express  
 - MongoDB  
 
 ## Развёртывание проекта:
 
-`npm i` — установка зависимостей;
+`npm i` — установка зависимостей;  
 `npm run start` — запуск серверa;  
 `npm run dev` — запуск сервера с hot-reload;  
 
